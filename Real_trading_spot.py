@@ -150,7 +150,7 @@ def wait_for_order_fill(symbol, order_id, timeout=30):
     logging.warning(f"Ожидание исполнения ордера {order_id} завершилось неудачно.")
     return False
 
-# Функция для ожидания выполнения OCO-ордера
+# Фу��кция для ожидания выполнения OCO-ордера
 def wait_for_oco_order_fill(symbol, order_list_id, check_interval=5):
     """Ожидает, пока один из ордеров OCO будет исполнен."""
     try:
@@ -171,3 +171,10 @@ def wait_for_oco_order_fill(symbol, order_list_id, check_interval=5):
 if __name__ == "__main__":
     # Пример вызова функции с параметрами для стоп-лосса и тейк-профита
     open_position_with_sl_tp(symbol='BNBUSDT', side='buy', quantity=0.05, stop_loss_percent=2, take_profit_percent=2)
+
+def calculate_position_size(symbol, entry_price, stop_loss_price, risk_percent=1):
+    account_balance = float(client.get_asset_balance(asset='USDT')['free'])
+    risk_amount = account_balance * (risk_percent / 100)
+    price_risk = abs(entry_price - stop_loss_price)
+    position_size = risk_amount / price_risk
+    return position_size
